@@ -1,6 +1,3 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 
 public class Day1Exercise2 implements Exercise {
@@ -8,7 +5,7 @@ public class Day1Exercise2 implements Exercise {
 
     @Override
     public void runOnData(String inputData) {
-        this.input = inputData.split(System.lineSeparator());
+        this.input = inputData.split(NEW_LINE_MATCHER);
     }
 
     @Override
@@ -30,7 +27,7 @@ public class Day1Exercise2 implements Exercise {
             lastWindowSum = window.sum();
         }
 
-        return String.valueOf(totalIncreased);
+        return String.valueOf(totalIncreased - 1);
     }
 
     @Override
