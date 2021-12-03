@@ -3,7 +3,7 @@ public class Day2Exercise1 implements Exercise {
 
     @Override
     public void runOnData(String dataString) {
-        input = dataString.split(System.lineSeparator());
+        input = dataString.split(NEW_LINE_MATCHER);
     }
 
     @Override
