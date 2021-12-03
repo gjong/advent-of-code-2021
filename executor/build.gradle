@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(':all-days')
+    implementation project(':day-1')
+    implementation project(':day-2')
+    implementation project(':day-3')
+}
