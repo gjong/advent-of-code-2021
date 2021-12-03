@@ -1,5 +1,4 @@
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.Arrays;
 
 public class Day3Exercise1 implements Exercise {
     private String[] input;
@@ -11,32 +10,38 @@ public class Day3Exercise1 implements Exercise {
 
     @Override
     public String execute() {
-        var mask = IntStream.range(0, input[0].length())
-                .mapToObj(i -> new BitMask())
-                .collect(Collectors.toList());
-        for (String rawInstruction : input) {
-            for (int pos = 0; pos < rawInstruction.length(); pos++) {
-                mask.get(pos)
-                        .push(rawInstruction.charAt(pos));
-            }
-        }
-
         var gammaRate = 0;
         var epsilonRate = 0;
-        var startPosition = mask.size() - 1;
-        for (int counter = startPosition; counter >= 0; counter--) {
-            var pusher = startPosition - counter;
+        var bitMatrix = rotateBitMatrix();
 
-            if (mask.get(counter).bit(true)) {
+        for (var bitPos = bitMatrix.length - 1; bitPos >= 0; bitPos--) {
+            var numberOnes = countOnes(bitMatrix[bitPos]);
+            var pusher = bitMatrix.length - 1 - bitPos;
+
+            if (numberOnes > (bitMatrix[bitPos].length - numberOnes)) {
                 gammaRate += (1L << pusher);
-            }
-
-            if (mask.get(counter).bit(false)) {
+            } else {
                 epsilonRate += (1L << pusher);
             }
         }
 
         return String.valueOf(gammaRate * epsilonRate);
+    }
+
+    private Character[][] rotateBitMatrix() {
+        var bitMatrix = new Character[input[0].length()][input.length];
+        for (var line = 0; line < input.length; line++) {
+            for (int pos = 0; pos < input[line].length(); pos++) {
+                bitMatrix[pos][line] = input[line].charAt(pos);
+            }
+        }
+        return bitMatrix;
+    }
+
+    private long countOnes(Character[] bits) {
+        return Arrays.stream(bits)
+                .filter(bit -> bit == '1')
+                .count();
     }
 
     @Override

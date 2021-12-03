@@ -1,7 +1,13 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Day3Exercise2 implements Exercise {
+    private final Logger logger = LoggerFactory.getLogger("Day-3-Exercise-2");
     private String[] input;
 
     @Override
@@ -25,31 +31,30 @@ public class Day3Exercise2 implements Exercise {
     }
 
     private String computeBitString(boolean mostCounted) {
-        var candidates = Arrays.stream(input).collect(Collectors.toList());
+        logger.debug("Computing the bit for most counted bit {} in position.", mostCounted);
+        var candidates = Arrays.stream(input).toList();
 
         var totalBits = input[0].length();
-        for (var counter = 0; counter < totalBits; counter++) {
-            if (candidates.size() == 1) {
-                break;
-            }
-
-            var index = counter;
-            var counts = candidates.stream()
-                    .map(bitString -> bitString.charAt(index))
-                    .collect(Collectors.groupingBy(ch -> ch == '1'));
-
-            var countOnes = counts.get(true).size();
-            var countZeros = counts.get(false).size();
-            if (countOnes > countZeros) {
-                candidates.removeIf(candidate -> candidate.charAt(index) == (mostCounted ? '0' : '1'));
-            } else if (countZeros > countOnes) {
-                candidates.removeIf(candidate -> candidate.charAt(index) == (mostCounted ? '1' : '0'));
-            } else {
-                candidates.removeIf(candidate -> candidate.charAt(index) == (mostCounted ? '0' : '1'));
-            }
+        for (var counter = 0; counter < totalBits && candidates.size() > 1; counter++) {
+            candidates = removeIrrelevantBits(mostCounted, candidates, counter);
         }
 
         return candidates.get(0);
+    }
+
+    private List<String> removeIrrelevantBits(boolean mostCounted, List<String> candidates, int index) {
+        var counts = candidates.stream()
+                .map(bitString -> bitString.charAt(index))
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        var lessOnesThanZero = counts.get('1') < counts.get('0');
+        char filterForBit = lessOnesThanZero
+                ? (mostCounted ? '1' : '0')
+                : (mostCounted ? '0' : '1');
+
+        return candidates.stream()
+                .filter(candidate -> candidate.charAt(index) != filterForBit)
+                .toList();
     }
 
     private int computeFromBits(String bits) {
