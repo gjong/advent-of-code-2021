@@ -5,7 +5,7 @@ public class Day3Exercise1 implements Exercise {
 
     @Override
     public void runOnData(String inputData) {
-        this.input = inputData.split(System.lineSeparator());
+        this.input = inputData.split(NEW_LINE_MATCHER);
     }
 
     @Override
