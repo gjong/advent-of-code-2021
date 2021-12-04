@@ -3,6 +3,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ServiceLoader;
 
 public class Executor {
@@ -21,10 +23,13 @@ public class Executor {
             logger.info("===================================================");
             logger.info("Exercise: {}.", exercise.getClass().getSimpleName());
 
+            var startTime = Instant.now();
             exercise.runOnData(locateExerciseInput(exercise));
             var answer = exercise.execute();
+            var endTime = Instant.now();
 
             logger.info("Answer: {}", answer);
+            logger.info("Computation time: {}ms", Duration.between(startTime, endTime).toMillis());
             logger.info("===================================================");
             logger.info("");
             logger.info("");

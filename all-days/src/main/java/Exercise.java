@@ -1,6 +1,6 @@
 public interface Exercise {
 
-    String NEW_LINE_MATCHER = "\n(\r)?";
+    String NEW_LINE_MATCHER = "(\r)?\n";
 
     void runOnData(String dataString);
 
