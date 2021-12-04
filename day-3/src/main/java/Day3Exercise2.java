@@ -6,13 +6,18 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.lang.Integer.parseInt;
+
 public class Day3Exercise2 implements Exercise {
     private final Logger logger = LoggerFactory.getLogger("Day-3-Exercise-2");
+
     private String[] input;
+    private int amountOfBits;
 
     @Override
     public void runOnData(String inputData) {
         this.input = inputData.split(NEW_LINE_MATCHER);
+        this.amountOfBits = this.input[0].length();
     }
 
     @Override
@@ -20,7 +25,7 @@ public class Day3Exercise2 implements Exercise {
         var oxygenCandidates = computeBitString(true);
         var co2Candidates = computeBitString(false);
 
-        var multiplication = computeFromBits(oxygenCandidates) * computeFromBits(co2Candidates);
+        var multiplication = parseInt(oxygenCandidates, 2) * parseInt(co2Candidates, 2);
 
         return String.valueOf(multiplication);
     }
@@ -34,8 +39,7 @@ public class Day3Exercise2 implements Exercise {
         logger.debug("Computing the bit for most counted bit {} in position.", mostCounted);
         var candidates = Arrays.stream(input).toList();
 
-        var totalBits = input[0].length();
-        for (var counter = 0; counter < totalBits && candidates.size() > 1; counter++) {
+        for (var counter = 0; counter < amountOfBits && candidates.size() > 1; counter++) {
             candidates = removeIrrelevantBits(mostCounted, candidates, counter);
         }
 
@@ -55,17 +59,5 @@ public class Day3Exercise2 implements Exercise {
         return candidates.stream()
                 .filter(candidate -> candidate.charAt(index) != filterForBit)
                 .toList();
-    }
-
-    private int computeFromBits(String bits) {
-        var number = 0;
-
-        var numberOfBits = bits.length() - 1;
-        for (int counter = numberOfBits; counter >= 0; counter--) {
-            if (bits.charAt(counter) == '1') {
-                number += 1L << (numberOfBits - counter);
-            }
-        }
-        return number;
     }
 }
