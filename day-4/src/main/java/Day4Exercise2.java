@@ -24,30 +24,25 @@ public class Day4Exercise2 implements Exercise {
     public String execute() {
         logger.info("Running bingo on drawn numbers: {}.", this.drawnNumbers);
 
-        int round = 0;
         int lastAnnounced = 0;
-        Board winningBoard = null;
-        while (!drawnNumbers.isEmpty()) {
-            lastAnnounced = drawnNumbers.poll();
-            announceNumber(round, lastAnnounced);
-            if (boards.stream().allMatch(b -> b.hasBingo(0))) {
-                winningBoard = boards.stream()
-                        .max(Comparator.comparingInt(Board::wonInRound))
-                        .get();
-                break;
-            }
-
-            round++;
+        while (!drawnNumbers.isEmpty() && boards.size() > 1) {
+            announceNumber(drawnNumbers.poll());
+            boards.removeIf(Board::hasBingo);
         }
 
-        return String.valueOf(lastAnnounced * winningBoard.getUnmatchedTotal());
+        while (!drawnNumbers.isEmpty()) {
+            lastAnnounced = drawnNumbers.poll();
+            announceNumber(lastAnnounced);
+            if (boards.stream().allMatch(Board::hasBingo)) {
+                break;
+            }
+        }
+
+        return String.valueOf(lastAnnounced * boards.get(0).getUnmatchedTotal());
     }
 
-    private void announceNumber(Integer round, Integer number) {
-        boards.forEach(b -> {
-            b.hearNumber(number);
-            b.hasBingo(round);
-        });
+    private void announceNumber(Integer number) {
+        boards.forEach(b -> b.hearNumber(number));
     }
 
     @Override

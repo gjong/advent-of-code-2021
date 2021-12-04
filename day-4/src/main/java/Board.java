@@ -1,82 +1,55 @@
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 class Board {
     private final int boardSize = 5;
-    private List<Integer> numbers;
-    private int bingoInRound = -1;
+    private List<List<Integer>> boardRows;
 
     public Board(String[] lines) {
-        this.numbers = Arrays.stream(String.join(" ", lines)
-                        .split("\s+"))
-                .filter(number -> !number.isEmpty())
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+        boardRows = Arrays.stream(lines)
+                .map(line ->
+                        Arrays.stream(line.split(" "))
+                                .filter(number -> !number.isEmpty())
+                                .map(Integer::parseInt)
+                                .collect(Collectors.toList()))
+                .toList();
     }
 
     public void hearNumber(Integer number) {
-        if (bingoInRound == -1) {
-            this.numbers.replaceAll(ingoing -> number.equals(ingoing) ? null : ingoing);
-        }
+        this.boardRows.forEach(row -> row.replaceAll(ingoing -> number.equals(ingoing) ? -1 : ingoing));
     }
 
-    public boolean hasBingo(int round) {
-        if (bingoInRound > -1) {
-            return true;
-        }
+    public boolean hasBingo() {
+        var hasBingo = this.boardRows
+                .stream()
+                .anyMatch(row -> row.stream().allMatch(number -> number == -1));
 
-        boolean hasBingo = false;
+        for (var column = 0; !hasBingo && column < boardSize; column++) {
+            var columnBingo = true;
+            for (var row = 0; columnBingo && row < boardSize; row++) {
+                columnBingo &= boardRows.get(row).get(column) == -1;
+            }
 
-        for (var row = 0; row < boardSize && !hasBingo; row++) {
-            var startIndex = row * 5;
-            var rowNumbers = numbers.subList(startIndex, Math.min(startIndex + 5, numbers.size()));
-            hasBingo = rowNumbers.stream().allMatch(Objects::isNull);
-        }
-
-        for (var column = 0; column < boardSize && !hasBingo; column++) {
-            hasBingo = numbers.get(column) == null
-                    && numbers.get(column + boardSize) == null
-                    && numbers.get(column + boardSize * 2) == null
-                    && numbers.get(column + boardSize * 3) == null
-                    && numbers.get(column + boardSize * 4) == null;
-        }
-
-        if (hasBingo && bingoInRound == -1) {
-            bingoInRound = round;
+            hasBingo |= columnBingo;
         }
 
         return hasBingo;
     }
 
-    public int wonInRound() {
-        return bingoInRound;
-    }
-
     public int getUnmatchedTotal() {
-        return this.numbers.stream()
-                .filter(Objects::nonNull)
+        return this.boardRows.stream()
+                .flatMap(Collection::stream)
+                .filter(number -> number > -1)
                 .mapToInt(i -> i)
                 .sum();
     }
 
     @Override
     public String toString() {
-        var builder = new StringBuilder("Board [");
-        for (var i=0; i < numbers.size(); i++) {
-            if (numbers.get(i) == null) {
-                builder.append(" X");
-            } else {
-                builder.append(String.format("%02d", numbers.get(i)));
-            }
-
-            builder.append(" ");
-            if ((i % boardSize) == 0) {
-                builder.append(System.lineSeparator());
-            }
-        }
-        builder.append("]");
-        return builder.toString();
+        return "Board{" +
+                "boardRows=" + boardRows +
+                '}';
     }
 }

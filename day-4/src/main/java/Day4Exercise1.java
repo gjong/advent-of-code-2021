@@ -41,7 +41,7 @@ public class Day4Exercise1 implements Exercise {
         boards.forEach(b -> b.hearNumber(number));
 
         return boards.stream()
-                .filter(b -> b.hasBingo(0))
+                .filter(Board::hasBingo)
                 .findAny();
     }
 
