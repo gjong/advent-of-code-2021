@@ -1,6 +1,8 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Day5Exercise1 implements Exercise {
 
@@ -16,19 +18,16 @@ public class Day5Exercise1 implements Exercise {
 
     @Override
     public String execute() {
-        var grid = new Grid(1000, 1000);
+        var duplicateFields = vectors.stream()
+                .map(Vector::toLine)
+                .flatMap(List::stream)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .values()
+                .stream()
+                .filter(count -> count > 1)
+                .count();
 
-        var totalCount = 0;
-        var drawnGrid = grid.computeGrid(vectors);
-        for (var x = 0; x < drawnGrid.length; x++) {
-            for (var y = 0; y < drawnGrid[x].length; y++) {
-                if (drawnGrid[x][y] > 1) {
-                    totalCount++;
-                }
-            }
-        }
-
-        return String.valueOf(totalCount);
+        return String.valueOf(duplicateFields);
     }
 
     @Override
