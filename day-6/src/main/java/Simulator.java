@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.math.BigInteger;
 
 public class Simulator {
     public static final int MAX_REPRODUCTION_AGE = 9;
@@ -8,20 +8,29 @@ public class Simulator {
         this.amountOFDays = amountOFDays;
     }
 
-    public long simulateWithStart(long[] amountOfFisherPerDay) {
+    public BigInteger simulateWithStart(long[] amountOfFisherPerDay) {
+        BigInteger[] fishCycles = new BigInteger[MAX_REPRODUCTION_AGE];
+        for (var idx=0; idx < amountOfFisherPerDay.length; idx++) {
+            fishCycles[idx] = BigInteger.valueOf(amountOfFisherPerDay[idx]);
+        }
+
         var currentDay = 0;
         while (currentDay < amountOFDays) {
-            var newBorn = amountOfFisherPerDay[0];
-
+            var newBorn = fishCycles[0];
             for (var age = 1; age < MAX_REPRODUCTION_AGE; age++) {
-                amountOfFisherPerDay[age - 1] = amountOfFisherPerDay[age];
+                fishCycles[age - 1] = fishCycles[age];
             }
 
-            amountOfFisherPerDay[6] += newBorn;
-            amountOfFisherPerDay[MAX_REPRODUCTION_AGE - 1] = newBorn;
+            fishCycles[6] = fishCycles[6].add(newBorn);
+            fishCycles[MAX_REPRODUCTION_AGE - 1] = newBorn;
             currentDay++;
         }
 
-        return Arrays.stream(amountOfFisherPerDay).sum();
+        BigInteger result = BigInteger.ZERO;
+        for (var idx=0; idx < fishCycles.length; idx++) {
+            result = result.add(fishCycles[idx]);
+        }
+
+        return result;
     }
 }
