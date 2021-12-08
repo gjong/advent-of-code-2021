@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import static java.lang.Integer.parseInt;
 
 public class Day3Exercise2 implements Exercise {
-    private final Logger logger = LoggerFactory.getLogger("Day-3-Exercise-2");
+    private final Logger logger = LoggerFactory.getLogger("exercise");
 
     private String[] input;
     private int amountOfBits;

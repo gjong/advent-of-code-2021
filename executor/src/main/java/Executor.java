@@ -20,18 +20,18 @@ public class Executor {
 
         logger.info("Starting the execution of all known exercises.");
         for (Exercise exercise : exercises) {
-            logger.info("===================================================");
-            logger.info("Exercise: {}.", exercise.getClass().getSimpleName());
+            logger.info("\u001b[37m==================== {} ========================\u001b[m", exercise.day());
+            logger.info("\tExercise: \u001b[1;34m{}\u001b[m", exercise.getClass().getSimpleName());
 
+            var exerciseInput = locateExerciseInput(exercise);
             var startTime = Instant.now();
-            exercise.runOnData(locateExerciseInput(exercise));
+            exercise.runOnData(exerciseInput);
             var answer = exercise.execute();
             var endTime = Instant.now();
 
-            logger.info("Answer: {}", answer);
-            logger.info("Computation time: {}ms", Duration.between(startTime, endTime).toMillis());
-            logger.info("===================================================");
-            logger.info("");
+            logger.info("\tComputation time: \u001b[36m{}ms\u001b[m", Duration.between(startTime, endTime).toMillis());
+            logger.info("\tAnswer: \u001b[32m{}\u001b[m", answer);
+            logger.info("\u001b[37m===================================================\u001b[m");
             logger.info("");
         }
         logger.info("Executed all found exercises.");
