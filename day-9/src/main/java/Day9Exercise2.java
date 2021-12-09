@@ -30,7 +30,7 @@ public class Day9Exercise2 implements Exercise {
         var lowestPoints = new ArrayList<Point>();
         for (var row = 0; row < rowCount; row++) {
             for (var column = 0; column < columnCount; column++) {
-                if (isLowestOfNeighbours(row, column)) {
+                if (Day9Utils.isLowestOfNeighbours(grid, row, column)) {
                     lowestPoints.add(new Point(row, column));
                 }
             }
@@ -46,7 +46,7 @@ public class Day9Exercise2 implements Exercise {
     }
 
     private int expandBasin(int row, int column) {
-        if (row < 0 || column < 0 || row >= rowCount || column >= columnCount || grid[row][column] == 9 || visited[row][column]) {
+        if (outOfBounds(row, column) || grid[row][column] == 9 || visited[row][column]) {
             return 0;
         }
         visited[row][column] = true;
@@ -59,17 +59,12 @@ public class Day9Exercise2 implements Exercise {
         return basinSize;
     }
 
+    private boolean outOfBounds(int row, int column) {
+        return row < 0 || column < 0 || row >= rowCount || column >= columnCount;
+    }
+
     @Override
     public String day() {
         return "day-9";
-    }
-
-    private boolean isLowestOfNeighbours(int row, int column) {
-        var value = grid[row][column];
-
-        return (row == 0 || grid[row - 1][column] > value)
-                && (column == 0 || grid[row][column - 1] > value)
-                && (column == (columnCount - 1) || grid[row][column + 1] > value)
-                && (row == (rowCount - 1) || grid[row + 1][column] > value);
     }
 }

@@ -1,5 +1,7 @@
-import java.util.Arrays;
 import java.util.List;
+
+import static util.InputProcessing.convertToIntStream;
+import static util.InputProcessing.convertToIntegers;
 
 public class Day7Exercise1 implements Exercise {
 
@@ -7,20 +9,16 @@ public class Day7Exercise1 implements Exercise {
 
     @Override
     public void runOnData(String dataString) {
-        crabPositions = Arrays.stream(dataString.split(","))
-                .map(String::trim)
-                .map(Integer::parseInt)
-                .sorted(Integer::compareTo)
-                .toList();
+        crabPositions = convertToIntegers(List.of(dataString.split(",")));
+        crabPositions.sort(Integer::compareTo);
     }
 
     @Override
     public String execute() {
         var median = crabPositions.get(crabPositions.size() / 2);
 
-        var totalFuelUsed = crabPositions.stream()
+        var totalFuelUsed = convertToIntStream(crabPositions)
                 .map(position -> Math.abs(position - median))
-                .mapToInt(number -> number)
                 .sum();
 
         return String.valueOf(totalFuelUsed);

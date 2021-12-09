@@ -3,6 +3,8 @@ package util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.lang.Integer.parseInt;
 
@@ -26,7 +28,12 @@ public interface InputProcessing {
     static List<Integer> convertToIntegers(List<String> lines) {
         return lines.stream()
                 .map(Integer::parseInt)
-                .toList();
+                .collect(Collectors.toList());
+    }
+
+    static IntStream convertToIntStream(List<Integer> input) {
+        return input.stream()
+                .mapToInt(i -> i);
     }
 
     static int[][] gridToArray(List<List<Integer>> grid) {

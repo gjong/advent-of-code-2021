@@ -17,9 +17,7 @@ public class Simulator {
         var currentDay = 0;
         while (currentDay < amountOFDays) {
             var newBorn = fishCycles[0];
-            for (var age = 1; age < MAX_REPRODUCTION_AGE; age++) {
-                fishCycles[age - 1] = fishCycles[age];
-            }
+            System.arraycopy(fishCycles, 1, fishCycles, 0, MAX_REPRODUCTION_AGE - 1);
 
             fishCycles[6] = fishCycles[6].add(newBorn);
             fishCycles[MAX_REPRODUCTION_AGE - 1] = newBorn;
@@ -27,8 +25,8 @@ public class Simulator {
         }
 
         BigInteger result = BigInteger.ZERO;
-        for (var idx=0; idx < fishCycles.length; idx++) {
-            result = result.add(fishCycles[idx]);
+        for (BigInteger fishCycle : fishCycles) {
+            result = result.add(fishCycle);
         }
 
         return result;

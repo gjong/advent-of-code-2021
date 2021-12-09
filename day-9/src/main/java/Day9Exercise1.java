@@ -24,21 +24,12 @@ public class Day9Exercise1 implements Exercise {
         var sumLowers = 0;
         for (var row = 0; row < rowCount; row++) {
             for (var column = 0; column < columnCount; column++) {
-                if (isLowestOfNeighbours(row, column)) {
+                if (Day9Utils.isLowestOfNeighbours(grid, row, column)) {
                     sumLowers += grid[row][column] + 1;
                 }
             }
         }
         return String.valueOf(sumLowers);
-    }
-
-    private boolean isLowestOfNeighbours(int row, int column) {
-        var value = grid[row][column];
-
-        return (row == 0 || grid[row - 1][column] > value)
-                && (column == 0 || grid[row][column - 1] > value)
-                && (column == (columnCount - 1) || grid[row][column + 1] > value)
-                && (row == (rowCount - 1) || grid[row + 1][column] > value);
     }
 
     @Override

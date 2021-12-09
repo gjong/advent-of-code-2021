@@ -1,3 +1,5 @@
+import grid.Vector;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -11,7 +13,7 @@ public class Day5Exercise1 implements Exercise {
     @Override
     public void runOnData(String dataString) {
         vectors = Arrays.stream(dataString.split(NEW_LINE_MATCHER))
-                .map(Vector::toVector)
+                .map(Day5Utils::toVector)
                 .filter(Predicate.not(Vector::isDiagonal))
                 .toList();
     }

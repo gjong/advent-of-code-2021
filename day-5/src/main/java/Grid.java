@@ -1,3 +1,5 @@
+import grid.Vector;
+
 import java.util.List;
 
 public record Grid(int width, int height) {

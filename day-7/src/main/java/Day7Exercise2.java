@@ -2,23 +2,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static util.InputProcessing.convertToIntStream;
+import static util.InputProcessing.convertToIntegers;
+
 public class Day7Exercise2 implements Exercise {
 
     private List<Integer> crabPositions;
 
     @Override
     public void runOnData(String dataString) {
-        crabPositions = Arrays.stream(dataString.split(","))
-                .map(String::trim)
-                .map(Integer::parseInt)
-                .sorted(Integer::compareTo)
-                .toList();
+        crabPositions = convertToIntegers(List.of(dataString.split(",")));
+        crabPositions.sort(Integer::compareTo);
     }
 
     @Override
     public String execute() {
-        var average = crabPositions.stream()
-                .mapToInt(i -> i)
+        var average = convertToIntStream(crabPositions)
                 .average()
                 .getAsDouble();
 
@@ -28,9 +27,8 @@ public class Day7Exercise2 implements Exercise {
     }
 
     private int computeFuel(int position) {
-        return crabPositions.stream()
+        return convertToIntStream(crabPositions)
                 .map(crabPos -> Math.abs(crabPos - position))
-                .mapToInt(number -> number)
                 .map(steps -> IntStream.rangeClosed(1, steps).sum())
                 .sum();
     }
