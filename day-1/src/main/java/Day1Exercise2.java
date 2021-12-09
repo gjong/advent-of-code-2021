@@ -1,33 +1,27 @@
-import java.util.Arrays;
+import java.util.List;
+
+import static util.InputProcessing.convertToIntegers;
+import static util.InputProcessing.convertToLines;
 
 public class Day1Exercise2 implements Exercise {
-    private String[] input;
+    private List<Integer> input;
 
     @Override
     public void runOnData(String inputData) {
-        this.input = inputData.split(NEW_LINE_MATCHER);
+        this.input = convertToIntegers(
+                convertToLines(inputData));
     }
 
     @Override
     public String execute() {
-        var numbers = Arrays.stream(input)
-                .filter(value -> !value.trim().isBlank())
-                .mapToInt(Integer::parseInt)
-                .toArray();
-
-        var window = new SlidingWindow(3);
-        int lastWindowSum = 0;
-        int totalIncreased = 0;
-        for (int number : numbers) {
-            window.push(number);
-
-            if (window.fullStack() && lastWindowSum < window.sum()) {
-                totalIncreased++;
+        var increases = 0;
+        for (var idx = 4; idx < input.size(); idx++) {
+            if (input.get(idx - 4) < input.get(idx)) {
+                increases++;
             }
-            lastWindowSum = window.sum();
         }
 
-        return String.valueOf(totalIncreased - 1);
+        return String.valueOf(increases - 1);
     }
 
     @Override

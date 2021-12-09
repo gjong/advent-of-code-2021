@@ -1,29 +1,23 @@
-import java.util.Arrays;
+import util.InputProcessing;
+
+import java.util.List;
 
 public class Day1Exercise1 implements Exercise {
-    private String[] input;
+    private List<Integer> input;
 
     @Override
     public void runOnData(String inputFile) {
-        this.input = inputFile.split(NEW_LINE_MATCHER);
+        var lines = InputProcessing.convertToLines(inputFile);
+        input = InputProcessing.convertToIntegers(lines);
     }
 
     @Override
     public String execute() {
-        var lines = Arrays.stream(input)
-                .filter(value -> !value.trim().isBlank())
-                .mapToInt(Integer::parseInt)
-                .toArray();
-
         int totalIncreased = 0;
-        int previousValue = lines[0];
-        for (int counter = 1; counter < lines.length; counter++) {
-            var curValue = lines[counter];
-
-            if (previousValue < curValue) {
+        for (int counter = 1; counter < input.size(); counter++) {
+            if (input.get(counter - 1) < input.get(counter)) {
                 totalIncreased++;
             }
-            previousValue = curValue;
         }
 
         return String.valueOf(totalIncreased);
