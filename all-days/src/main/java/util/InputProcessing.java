@@ -27,6 +27,7 @@ public interface InputProcessing {
 
     static List<Integer> convertToIntegers(List<String> lines) {
         return lines.stream()
+                .map(String::trim)
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
     }
