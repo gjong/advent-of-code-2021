@@ -10,9 +10,10 @@ public class Decoder {
     public Decoder(List<CodedEntry> codedEntries) {
         this.codedEntries = codedEntries;
         this.decoded = new CodedEntry[10];
+        alignment();
     }
 
-    public void alignment() {
+    public final void alignment() {
         // 2 and 7 are the only having unique counts
         decoded[1] = findMatchingSegment(2).get(0);
         decoded[4] = findMatchingSegment(4).get(0);

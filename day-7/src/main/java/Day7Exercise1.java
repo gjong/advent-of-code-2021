@@ -1,25 +1,26 @@
-import java.util.List;
-
-import static util.InputProcessing.convertToIntStream;
-import static util.InputProcessing.convertToIntegers;
+import com.jongsoft.lang.Collections;
+import com.jongsoft.lang.collection.Sequence;
 
 public class Day7Exercise1 implements Exercise {
 
-    private List<Integer> crabPositions;
+    private Sequence<Integer> crabPositions;
 
     @Override
     public void runOnData(String dataString) {
-        crabPositions = convertToIntegers(List.of(dataString.split(",")));
-        crabPositions.sort(Integer::compareTo);
+        crabPositions = Collections.List(dataString.split(","))
+                .map(Integer::parseInt)
+                .sorted();
     }
 
     @Override
     public String execute() {
-        var median = crabPositions.get(crabPositions.size() / 2);
+        var median = (int) crabPositions.median();
 
-        var totalFuelUsed = convertToIntStream(crabPositions)
+        var totalFuelUsed = crabPositions
                 .map(position -> Math.abs(position - median))
-                .sum();
+                .sum()
+                .get()
+                .intValue();
 
         return String.valueOf(totalFuelUsed);
     }

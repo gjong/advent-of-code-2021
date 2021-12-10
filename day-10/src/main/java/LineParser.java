@@ -1,6 +1,6 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.jongsoft.lang.Collections;
+import com.jongsoft.lang.collection.Sequence;
+
 import java.util.Stack;
 
 public class LineParser {
@@ -38,10 +38,9 @@ public class LineParser {
         return invalidOn;
     }
 
-    public List<Brackets> computeAutocomplete() {
-        var autocomplete = new ArrayList<Brackets>(parsingStack);
-        Collections.reverse(autocomplete);
-        return autocomplete;
+    public Sequence<Brackets> computeAutocomplete() {
+        return Collections.List(parsingStack)
+                .reverse();
     }
 
     @Override

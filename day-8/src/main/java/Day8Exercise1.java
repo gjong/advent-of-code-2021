@@ -1,8 +1,7 @@
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-import java.util.List;
+import com.jongsoft.lang.API;
+import com.jongsoft.lang.Collections;
+import com.jongsoft.lang.collection.Sequence;
+import com.jongsoft.lang.collection.tuple.Pair;
 
 public class Day8Exercise1 implements Exercise {
     private String[] lines;
@@ -14,19 +13,20 @@ public class Day8Exercise1 implements Exercise {
 
     @Override
     public String execute() {
-        var counted = 0;
-        for (var line : lines) {
-            var split = line.split("\\|");
+        var counted = Collections.List(lines)
+                .map(line -> API.<String, Pair<String, String>>Tuple(line.split("\\|")))
+                .map(tuple -> API.Tuple(
+                        new Decoder(splitToNumbers(tuple.getFirst()).toJava()),
+                        splitToNumbers(tuple.getSecond())))
+                .map(tuple -> tuple
+                        .getSecond()
+                        .map(tuple.getFirst()::countMatch1or4or7or8)
+                        .sum()
+                        .get())
+                .sum()
+                .get();
 
-            var decoder = new Decoder(splitToNumbers(split[0]));
-            decoder.alignment();
-            counted += splitToNumbers(split[1]).stream()
-                    .map(decoder::countMatch1or4or7or8)
-                    .mapToInt(i -> i)
-                    .sum();
-        }
-
-        return String.valueOf(counted);
+        return String.valueOf(counted.intValue());
     }
 
     @Override
@@ -34,10 +34,9 @@ public class Day8Exercise1 implements Exercise {
         return "day-8";
     }
 
-    private List<CodedEntry> splitToNumbers(String token) {
-        return Arrays.stream(token.trim().split(" "))
+    private Sequence<CodedEntry> splitToNumbers(String token) {
+        return Collections.List(token.trim().split(" "))
                 .map(String::trim)
-                .map(CodedEntry::new)
-                .toList();
+                .map(CodedEntry::new);
     }
 }

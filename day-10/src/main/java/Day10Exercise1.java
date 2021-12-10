@@ -1,24 +1,25 @@
+import com.jongsoft.lang.Collections;
+import com.jongsoft.lang.collection.Sequence;
 import util.InputProcessing;
-
-import java.util.List;
 
 public class Day10Exercise1 implements Exercise {
 
-    private List<String> dataLines;
+    private Sequence<String> dataLines;
 
     @Override
     public void runOnData(String dataString) {
-        dataLines = InputProcessing.convertToLines(dataString);
+        dataLines =  Collections.List(InputProcessing.convertToLines(dataString));
     }
 
     @Override
     public String execute() {
-        var totalCost = dataLines.stream()
+        var totalCost = dataLines
                 .map(LineParser::new)
                 .filter(LineParser::isInValid)
-                .map(LineParser::getInvalidOn)
-                .mapToInt(b -> b.mismatchValue)
-                .sum();
+                .map(parser -> parser.getInvalidOn().mismatchValue)
+                .sum()
+                .map(Double::intValue)
+                .get();
         return String.valueOf(totalCost);
     }
 
