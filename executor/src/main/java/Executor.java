@@ -26,10 +26,13 @@ public class Executor {
             var exerciseInput = locateExerciseInput(exercise);
             var startTime = Instant.now();
             exercise.runOnData(exerciseInput);
+            var timeAfterPrepare = Instant.now();
             var answer = exercise.execute();
             var endTime = Instant.now();
 
             logger.info("\tComputation time: \u001b[36m{}ms\u001b[m", Duration.between(startTime, endTime).toMillis());
+            logger.info("\tPreparation time: \u001b[36m{}ms\u001b[m", Duration.between(startTime, timeAfterPrepare).toMillis());
+            logger.info("\tAlgorithm time: \u001b[36m{}ms\u001b[m", Duration.between(timeAfterPrepare, endTime).toMillis());
             logger.info("\tAnswer: \u001b[32m{}\u001b[m", answer);
             logger.info("\u001b[37m===================================================\u001b[m");
             logger.info("");
