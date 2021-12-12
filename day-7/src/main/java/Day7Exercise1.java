@@ -1,6 +1,8 @@
 import com.jongsoft.lang.Collections;
 import com.jongsoft.lang.collection.Sequence;
 
+import static java.lang.Integer.parseInt;
+
 public class Day7Exercise1 implements Exercise {
 
     private Sequence<Integer> crabPositions;
@@ -8,7 +10,7 @@ public class Day7Exercise1 implements Exercise {
     @Override
     public void runOnData(String dataString) {
         crabPositions = Collections.List(dataString.split(","))
-                .map(Integer::parseInt)
+                .map(number -> parseInt(number.trim()))
                 .sorted();
     }
 
