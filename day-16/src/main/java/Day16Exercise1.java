@@ -14,7 +14,7 @@ public class Day16Exercise1 implements Exercise {
     @Override
     public String execute() {
         var instructions = hexStrings.stream()
-                .map(EncodedOperation::parseOperations)
+                .map(HexDecoder::parseOperations)
                 .toList();
 
         var cumulativeVersion = 0;
