@@ -44,7 +44,7 @@ public class Day15Exercise2 implements Exercise {
                     correctedValue -= 9;
                 }
 
-                return new PathFinder.Node(new Point(x, y), correctedValue);
+                return new PathFinder.Node(correctedValue);
             });
         }
     }
@@ -56,7 +56,7 @@ public class Day15Exercise2 implements Exercise {
         var lines = Collections.List(dataString.split(NEW_LINE_MATCHER));
 
         var baseGrid = new VirtualGrid(lines.size(), lines.get(0).length(), 5);
-        baseGrid.populate(lines, (point, number) -> new PathFinder.Node(point, parseInt(number)));
+        baseGrid.populate(lines, (point, number) -> new PathFinder.Node(parseInt(number)));
 
         pathFinder = new PathFinder(baseGrid);
     }
