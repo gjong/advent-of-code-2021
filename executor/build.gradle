@@ -15,4 +15,5 @@ dependencies {
     implementation project(':day-13')
     implementation project(':day-14')
     implementation project(':day-15')
+    implementation project(':day-16')
 }
