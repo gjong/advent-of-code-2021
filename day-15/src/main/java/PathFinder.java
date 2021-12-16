@@ -1,9 +1,11 @@
 import grid.Grid;
-import grid.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 public class PathFinder {
     private static final Logger LOGGER = LoggerFactory.getLogger("Exercise");

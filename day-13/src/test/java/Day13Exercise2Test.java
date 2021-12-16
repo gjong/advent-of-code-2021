@@ -31,6 +31,12 @@ class Day13Exercise2Test {
                 fold along y=7
                 fold along x=5""");
 
-        assertEquals("17", exercise.execute());
+        assertEquals(System.lineSeparator() + "#####" + System.lineSeparator() +
+                "#   #" + System.lineSeparator() +
+                "#   #" + System.lineSeparator() +
+                "#   #" + System.lineSeparator() +
+                "#####" + System.lineSeparator() +
+                "     " + System.lineSeparator() +
+                "     " + System.lineSeparator(), exercise.execute());
     }
 }

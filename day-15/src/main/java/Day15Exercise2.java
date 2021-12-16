@@ -33,12 +33,14 @@ public class Day15Exercise2 implements Exercise {
         @Override
         public PathFinder.Node at(int x, int y) {
             return computed.computeIfAbsent(new Point(x, y), point -> {
-                var sourceX = x % super.width();
-                var sourceY = y % super.height();
+                var actualWidth = super.width();
+                var actualHeight = super.height();
+                var sourceX = x % actualWidth;
+                var sourceY = y % actualHeight;
                 var sourceValue = super.at(sourceX, sourceY);
 
-                var xCorrection = x / super.width();
-                var yCorrection = y / super.height();
+                var xCorrection = x / actualWidth;
+                var yCorrection = y / actualHeight;
                 var correctedValue = sourceValue.getWeight() + xCorrection + yCorrection;
                 if (correctedValue > 9) {
                     correctedValue -= 9;
