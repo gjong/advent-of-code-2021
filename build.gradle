@@ -3,7 +3,6 @@ plugins {
 }
 
 allprojects {
-
     apply plugin: 'java'
     apply plugin: 'org.jetbrains.kotlin.jvm'
 
@@ -29,10 +28,11 @@ allprojects {
 
     dependencies {
         implementation 'org.slf4j:slf4j-api:1.7.32'
-        implementation 'ch.qos.logback:logback-core:1.2.7'
-        implementation 'ch.qos.logback:logback-classic:1.2.7'
-        implementation 'com.jongsoft.lang:language:1.1.4'
+        implementation 'ch.qos.logback:logback-core:1.2.9'
+        implementation 'ch.qos.logback:logback-classic:1.2.9'
+        implementation 'com.jongsoft.lang:language:1.1.6'
 
-        testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+        testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     }
 }
+

@@ -37,6 +37,14 @@ public interface InputProcessing {
                 .mapToInt(i -> i);
     }
 
+    static int summingInt(int...values) {
+        int sum = 0;
+        for (var value : values) {
+            sum += value;
+        }
+        return sum;
+    }
+
     static int[][] gridToArray(List<List<Integer>> grid) {
         var array = new int[grid.size()][grid.get(0).size()];
 
