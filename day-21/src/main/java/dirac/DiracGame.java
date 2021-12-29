@@ -1,14 +1,14 @@
 package dirac;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
-
-import static util.InputProcessing.summingInt;
 
 public abstract class DiracGame {
 
-    private GameState startState;
     private final Predicate<Player> wonRule;
+    private GameState startState;
 
     public DiracGame(Predicate<Player> wonRule) {
         this.wonRule = wonRule;
@@ -24,22 +24,21 @@ public abstract class DiracGame {
     }
 
     public void playGame() {
-        var gameComputeQueue = new LinkedList<RoundResult>();
-        gameComputeQueue.add(new RoundResult(startState, 1));
-        while (!gameComputeQueue.isEmpty()) {
-            var gameState = gameComputeQueue.poll();
+        computeGameState(new RoundResult(startState, 1));
+    }
 
-            var winningPlayer = computeWinningPlayer(gameState.gameState());
-            if (winningPlayer.isPresent()) {
-                wonGame(gameState);
-                continue;
-            }
-
-            gameComputeQueue.addAll(computeRound(gameState));
+    private void computeGameState(RoundResult currentState) {
+        var hasWinner = computeWinningPlayer(currentState.gameState);
+        if (hasWinner.isPresent()) {
+            wonGame(currentState);
+        } else {
+            computeRound(currentState)
+                    .forEach(this::computeGameState);
         }
     }
 
     protected abstract void wonGame(RoundResult result);
+
     protected abstract List<RoundResult> computeRound(RoundResult previousRound);
 
     protected Optional<Player> computeWinningPlayer(GameState gameState) {
@@ -52,22 +51,23 @@ public abstract class DiracGame {
         return Optional.empty();
     }
 
-    public static record Player(int position, int score) {
+    public record Player(int position, int score) {
         public Player move(int positions) {
             var newPosition = (position + positions) % 10;
             var newScore = score + (newPosition + 1);
             return new Player(newPosition, newScore);
         }
     }
-    public static record RoundResult(GameState gameState, long weight) {}
-    public static record GameState(int playerTurn, Player[] players) {
+
+    public record RoundResult(GameState gameState, long weight) {
+    }
+
+    public record GameState(int playerTurn, Player[] players) {
         public GameState throwDice(DiracDice dice) {
             var diceResults = dice.roll();
-            var nextPlayerTurn = (playerTurn + 1) % players.length;
-            var updatePlayers = new Player[players.length];
-            System.arraycopy(players, 0, updatePlayers, 0, players.length);
-            updatePlayers[playerTurn] = players[playerTurn].move(summingInt(diceResults));
-            return new GameState(nextPlayerTurn, updatePlayers);
+            var updatePlayers = Arrays.copyOf(players, players.length);
+            updatePlayers[playerTurn] = players[playerTurn].move(diceResults);
+            return new GameState((playerTurn + 1) % players.length, updatePlayers);
         }
     }
 }

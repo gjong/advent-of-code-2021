@@ -13,13 +13,13 @@ public class Day21Exercise2 implements Exercise {
     }
 
     private static final List<QuantumDice> DICE_OPTIONS = List.of(
-            new QuantumDice(() -> new int[]{1, 1, 1}, 1),
-            new QuantumDice(() -> new int[]{1, 1, 2}, 3),
-            new QuantumDice(() -> new int[]{1, 2, 2}, 6),
-            new QuantumDice(() -> new int[]{1, 2, 3}, 7),
-            new QuantumDice(() -> new int[]{1, 3, 3}, 6),
-            new QuantumDice(() -> new int[]{2, 3, 3}, 3),
-            new QuantumDice(() -> new int[]{3, 3, 3}, 1));
+            new QuantumDice(() -> 3, 1),
+            new QuantumDice(() -> 4, 3),
+            new QuantumDice(() -> 5, 6),
+            new QuantumDice(() -> 6, 7),
+            new QuantumDice(() -> 7, 6),
+            new QuantumDice(() -> 8, 3),
+            new QuantumDice(() -> 9, 1));
 
     private int pawn1Position;
     private int pawn2Position;
@@ -49,7 +49,7 @@ public class Day21Exercise2 implements Exercise {
 
             @Override
             protected void wonGame(RoundResult result) {
-                if (result.gameState().players()[0].score() > 21) {
+                if (result.gameState().players()[0].score() >= 21) {
                     player1Wins.addAndGet(result.weight());
                 } else {
                     player2Wins.addAndGet(result.weight());

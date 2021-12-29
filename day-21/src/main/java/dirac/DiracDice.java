@@ -2,14 +2,14 @@ package dirac;
 
 public interface DiracDice {
 
-    int[] roll();
+    int roll();
 
     class SimpleDice implements DiracDice {
         private int currentValue;
 
         @Override
-        public int[] roll() {
-            return new int[] {increase(), increase(), increase()};
+        public int roll() {
+            return increase() + increase() + increase();
         }
 
         private int increase() {
